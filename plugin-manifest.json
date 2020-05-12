@@ -1,0 +1,32 @@
+{
+  "api": {
+    "require_startup_execution": false,
+    "class_name": "com.sportsmax.firebaseanalytics_android.FirebaseAnalyticsAgent",
+    "modules": []
+  },
+  "dependency_repository_url": [{
+      "url": "https://github.com/hussein-yassine-cme/Firebaseanalytics_android.git"
+    }
+  ],
+  "platform": "android",  
+  "author_name": "Hussein Yassine",
+  "author_email": "hussein.yassine@gotocme.com",
+  "manifest_version": "0.0.1",
+  "name": "SMaxFirebaseAnalaytics",
+  "description": "SMaxFirebaseAnalaytics",
+  "type": "analytics",
+  "identifier": "SMaxFirebaseAnalaytics",
+  "ui_builder_support": true,
+  "screen": false,
+  "dependency_name": "com.applicaster:SMaxFirebaseAnalaytics",
+  "dependency_version": "0.0.1",
+  "whitelisted_account_ids": [
+    "5af949534da8f300080050f9"
+  ],
+  "min_zapp_sdk": "11.2.0",
+  "deprecated_since_zapp_sdk": "",
+  "unsupported_since_zapp_sdk": "",
+  "react_native": false,
+  "custom_configuration_fields": [ 
+  ]
+}
