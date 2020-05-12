@@ -5,7 +5,6 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import com.applicaster.analytics.BaseAnalyticsAgent
-import com.applicaster.util.APLogger
 import com.applicaster.util.StringUtil
 import com.google.firebase.analytics.FirebaseAnalytics
 import java.util.*
@@ -19,15 +18,7 @@ class FirebaseAnalyticsAgent : BaseAnalyticsAgent() {
      * You can delete all this variables when you doing your plugin.
      */
     // region vars
-    @Transient
-    private val MOBILE_APP_ACCOUNT_ID_IDENTIFIER = "mobile_app_account_id"
-    private val ANONYMIZE_USER_IP_IDENTIFIER = "anonymize_user_ip"
-    private val SCREEN_VIEWS_IDENTIFIER = "screen_views"
-    private val DO_NOT_SET_CLIENT_ID = "do_not_set_client_id"
-    //private var mobileAppAccountId: String? = null
-    //private var anonymizeUserIp = false
-    //private var screenViews = false
-    //private var shouldSetClientId = false
+    @Transient 
     private var firebaseAnalytics: FirebaseAnalytics? = null
 
     // custom events
