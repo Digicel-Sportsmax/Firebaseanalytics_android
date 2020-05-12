@@ -1,0 +1,3 @@
+rootProject.name='Firebaseanalytics_android'
+include ':firebaseanalytics_android'
+project(':firebaseanalytics_android').projectDir = new File('firebaseanalytics_android')
