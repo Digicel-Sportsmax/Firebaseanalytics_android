@@ -18,13 +18,13 @@ class FirebaseAnalyticsAgent : BaseAnalyticsAgent() {
      * You can delete all this variables when you doing your plugin.
      */
     // region vars
-    @Transient 
+    @Transient
     private var firebaseAnalytics: FirebaseAnalytics? = null
 
     // custom events
-    private val PLAY_EVENT = "Play video"
-    private val PAUSE_EVENT = "Pause video"
-    private val STOP_EVENT = "Stop video"
+    private val PLAY_EVENT = "Play_video"
+    private val PAUSE_EVENT = "Pause_video"
+    private val STOP_EVENT = "Stop_video"
 
     /**
      * Initialization of your Analytics provider.
@@ -84,7 +84,11 @@ class FirebaseAnalyticsAgent : BaseAnalyticsAgent() {
     override fun logEvent(eventName: String?) {
         super.logEvent(eventName)
         eventName?.let { it ->
-            firebaseAnalytics?.logEvent(it, Bundle())
+            val event = it
+                .replace(" ","_")
+                .replace("-","_")
+                .replace(":","_").trim()
+            firebaseAnalytics?.logEvent(event, null)
         }
     }
 
@@ -95,15 +99,17 @@ class FirebaseAnalyticsAgent : BaseAnalyticsAgent() {
      */
     override fun logEvent(eventName: String?, params: TreeMap<String, String>?) {
         super.logEvent(eventName, params)
-        Log.wtf("** eventName", "is " + eventName)
         val label: String = params?.let { it ->
             getLabel(it)
         } ?: ""
-        Log.wtf("** params", "is " + params)
         val bundle = Bundle()
         bundle.putString("params", label)
         eventName?.let { it ->
-            firebaseAnalytics?.logEvent(it,bundle)
+            val event = it
+                .replace(" ","_")
+                .replace("-","_")
+                .replace(":","_").trim()
+            firebaseAnalytics?.logEvent(event,bundle)
         }
     }
 
@@ -191,6 +197,9 @@ class FirebaseAnalyticsAgent : BaseAnalyticsAgent() {
 
     override fun setScreenView(activity: Activity?, screenView: String) {
         super.setScreenView(activity, screenView)
-        logEvent("Screen Visit."+screenView)
+        Log.wtf("** Screen name","is $screenView")
+        activity?.let { it ->
+            firebaseAnalytics?.setCurrentScreen(it, screenView,"")
+        }
     }
 }
