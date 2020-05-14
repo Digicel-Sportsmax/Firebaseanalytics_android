@@ -5,7 +5,7 @@
     "modules": []
   },
   "dependency_repository_url": [{
-      "url": "https://github.com/hussein-yassine-cme/Firebaseanalytics_android.git"
+      "url": "https://github.com/Digicel-Sportsmax/Firebaseanalytics_android.git"
     }
   ],
   "platform": "android",  
