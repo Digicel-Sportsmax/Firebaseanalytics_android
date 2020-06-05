@@ -3,9 +3,13 @@ package com.sportsmax.firebaseanalytics_android
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import com.applicaster.analytics.BaseAnalyticsAgent
 import com.applicaster.util.StringUtil
+import com.google.android.gms.analytics.GoogleAnalytics
+import com.google.android.gms.analytics.HitBuilders.EventBuilder
+import com.google.android.gms.analytics.Tracker
 import com.google.firebase.analytics.FirebaseAnalytics
 import java.util.*
 
@@ -13,6 +17,9 @@ class FirebaseAnalyticsAgent : BaseAnalyticsAgent() {
 
     private val TAG: String = FirebaseAnalyticsAgent::class.java.simpleName
 
+    private val MAX_SCREEN_NAME_LONG = 35
+    private val MAX_PARAM_NAME_LONG = 40
+    private val MAX_PARAM_VALUE_LONG = 100
     /**
      * This variables are created for Google Analytics purposes.
      * You can delete all this variables when you doing your plugin.
@@ -32,6 +39,7 @@ class FirebaseAnalyticsAgent : BaseAnalyticsAgent() {
      */
     override fun initializeAnalyticsAgent(context: Context?) {
         super.initializeAnalyticsAgent(context)
+        Log.wtf("** initializeAnalyticsAgent name", "is initializeAnalyticsAgent")
         firebaseAnalytics = FirebaseAnalytics.getInstance(context!!)
     }
 
@@ -68,6 +76,7 @@ class FirebaseAnalyticsAgent : BaseAnalyticsAgent() {
 
     override fun startTrackingSession(context: Context?) {
         super.startTrackingSession(context)
+        Log.wtf("** startTrackingSession name", "is startTrackingSession")
     }
 
     override fun stopTrackingSession(context: Context?) {
@@ -84,11 +93,7 @@ class FirebaseAnalyticsAgent : BaseAnalyticsAgent() {
     override fun logEvent(eventName: String?) {
         super.logEvent(eventName)
         eventName?.let { it ->
-            val event = it
-                .replace(" ","_")
-                .replace("-","_")
-                .replace(":","_").trim()
-            firebaseAnalytics?.logEvent(event, null)
+            firebaseAnalytics?.logEvent(it.alphaNumericOnly().cutToMaxLength(MAX_PARAM_NAME_LONG), null)
         }
     }
 
@@ -99,41 +104,18 @@ class FirebaseAnalyticsAgent : BaseAnalyticsAgent() {
      */
     override fun logEvent(eventName: String?, params: TreeMap<String, String>?) {
         super.logEvent(eventName, params)
-        val label: String = params?.let { it ->
-            getLabel(it)
-        } ?: ""
-        val bundle = Bundle()
-        bundle.putString("params", label)
-        eventName?.let { it ->
-            val event = it
-                .replace(" ","_")
-                .replace("-","_")
-                .replace(":","_").trim()
-            firebaseAnalytics?.logEvent(event,bundle)
-        }
-    }
-
-    private fun getLabel(map: TreeMap<String, String>): String? {
-        val notAvailableString = "N/A"
-        // Build the labels param.
-        var labelsString: String? = null
-        if (map != null) {
-            val labels = StringBuilder()
-            for (key in map.keys) {
-                var value = map[key]
-                if (StringUtil.isEmpty(value)) {
-                    value = notAvailableString
-                }
-                val label = String.format("%s=%s;", key, value)
-                labels.append(label)
+        params?.let { it ->
+            val bundle = Bundle()
+            for ((key, value) in it.entries) {
+                bundle.putString(
+                    key.alphaNumericOnly().cutToMaxLength(MAX_PARAM_NAME_LONG),
+                    value.alphaNumericOnly().cutToMaxLength(MAX_PARAM_VALUE_LONG)
+                )
             }
-            if (labels.length > 0) {
-                // If it's not empty, we need to remove the last ';'
-                labels.setLength(labels.length - 1)
+            eventName?.let { it ->
+                firebaseAnalytics?.logEvent(it.alphaNumericOnly().cutToMaxLength(MAX_PARAM_NAME_LONG), bundle)
             }
-            labelsString = labels.toString()
         }
-        return labelsString
     }
 
     override fun startTimedEvent(eventName: String?) {
@@ -197,9 +179,29 @@ class FirebaseAnalyticsAgent : BaseAnalyticsAgent() {
 
     override fun setScreenView(activity: Activity?, screenView: String) {
         super.setScreenView(activity, screenView)
-        Log.wtf("** Screen name","is $screenView")
+        val screenName:String
+        if (screenView.contains("ATOM Article", ignoreCase = true)){
+            val title = screenView.replace("ATOM Article", "Article").trim()
+            screenName =  title
+        }else{
+            screenName = screenView
+        }
+        Log.wtf("** Screen name", "is $screenName")
         activity?.let { it ->
-            firebaseAnalytics?.setCurrentScreen(it, screenView,"")
+            firebaseAnalytics?.setCurrentScreen(it, screenName.cutToMaxLength(MAX_SCREEN_NAME_LONG), null)
         }
     }
+}
+
+fun String.cutToMaxLength(maxLength: Int): String{
+    return if (this.length > maxLength){
+        this.substring(0, maxLength)
+    }else{
+        this
+    }
+}
+
+fun String.alphaNumericOnly(): String{
+    val regex = Regex("[^A-Za-z0-9 ]")
+    return regex.replace(this, "").replace(" ","_")
 }

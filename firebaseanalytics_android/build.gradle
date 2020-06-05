@@ -85,6 +85,7 @@ dependencies {
     def firebase_version = "17.1.0"
     implementation 'com.google.firebase:firebase-analytics:'+firebase_version
     implementation 'com.google.firebase:firebase-core:'+firebase_version
+    implementation 'com.google.android.gms:play-services-analytics:17.0.0'
 }
 
 
