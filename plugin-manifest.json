@@ -11,7 +11,7 @@
   "platform": "android",  
   "author_name": "Hussein Yassine",
   "author_email": "hussein.yassine@gotocme.com",
-  "manifest_version": "0.0.3",
+  "manifest_version": "0.0.4",
   "name": "SMaxFirebaseAnalaytics",
   "description": "SMaxFirebaseAnalaytics",
   "type": "analytics",
@@ -19,7 +19,7 @@
   "ui_builder_support": true,
   "screen": false,
   "dependency_name": "com.applicaster:SMaxFirebaseAnalaytics",
-  "dependency_version": "0.0.3",
+  "dependency_version": "0.0.4",
   "whitelisted_account_ids": [
     "5af949534da8f300080050f9"
   ],

@@ -209,17 +209,9 @@ project.afterEvaluate {
     }
 }
 
-static def getBintrayUserProperty() {
-    return 'applicasterapps'//System.getenv("BINTRAY_USER")
-}
-
-static def getBintrayApiKeyProperty() {
-    return '078882fe17e5198e329a9b3a3d0d7714e68aa2b0'//System.getenv("BINTRAY_API_KEY")
-}
-
 bintray {
-    user = bintrayUserProperty
-    key = bintrayApiKeyProperty
+    user = MAVEN_USERNAME
+    key = MAVEN_PASSWORD
     publications = ['mavenJava']
 
     dryRun = false
